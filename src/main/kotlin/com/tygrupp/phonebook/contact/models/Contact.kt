@@ -1,25 +1,22 @@
-package com.tygrupp.phonebook.contact
+package com.tygrupp.phonebook.contact.models
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import lombok.AllArgsConstructor
+import lombok.Builder
 import lombok.Getter
-import lombok.NoArgsConstructor
 import lombok.NonNull
 import lombok.Setter
 
-@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 @Setter
 @Entity
-class Contact (
-    @Id @GeneratedValue
-    var id: Long,
+class Contact(
     val name: String,
-    @NonNull @Column(unique = true)
+    @NonNull
     val phoneNumber: String,
-    val address: String
+    val address: String,
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    var id: Long? = null
 )
