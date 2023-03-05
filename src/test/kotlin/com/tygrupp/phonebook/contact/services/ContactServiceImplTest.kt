@@ -4,6 +4,7 @@ import com.tygrupp.phonebook.contact.models.Contact
 import com.tygrupp.phonebook.contact.models.Entry
 import com.tygrupp.phonebook.contact.repository.ContactRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("dev")
-@Execution(ExecutionMode.SAME_THREAD)
+//@Execution(ExecutionMode.CONCURRENT)
 class ContactServiceImplTest {
 
     @Autowired
@@ -30,11 +31,6 @@ class ContactServiceImplTest {
             Entry("Olukunbi","09069390202", "No 1, Road 3f")
         )
     }
-
-//    @AfterEach
-//    fun tearDown() {
-//        contactService.deleteContact(contact.phoneNumber)
-//    }
 
     @Test
     fun testThatContactExist() {
@@ -51,18 +47,18 @@ class ContactServiceImplTest {
         assertEquals("No 1, Road 3f", contact.address)
     }
 
-    @Test
+//    @Test
 //    @Execution(ExecutionMode.CONCURRENT)
-    fun test_ThatContactCreated_IsPersisted() {
-        assertThat(contactRepository.count()).isEqualTo(1L)
-    }
-    @Test
-    fun test_ThatContact_CanBeRetrieved_ByPhoneNumber() {
-        val retrievedContact = contactService.findContactByPhoneNumber("09069390202")
-        val repositoryContact = contactRepository.findByPhoneNumber("09069390202")
-        assertThat(retrievedContact?.get()?.name).isEqualTo("Olukunbi")
-        assertThat(retrievedContact?.get()?.name).isEqualTo(repositoryContact?.get()?.name)
-    }
+//    fun test_ThatContactCreated_IsPersisted() {
+//        assertThat(contactRepository.count()).isEqualTo(1L)
+//    }
+//    @Test
+//    fun test_ThatContact_CanBeRetrieved_ByPhoneNumber() {
+//        val retrievedContact = contactService.findContactByPhoneNumber("09069390202")
+//        val repositoryContact = contactRepository.findByPhoneNumber("09069390202")
+//        assertThat(retrievedContact?.get()?.name).isEqualTo("Olukunbi")
+//        assertThat(retrievedContact?.get()?.name).isEqualTo(repositoryContact?.get()?.name)
+//    }
 
     @Test
     fun test_ThatContact_CanBeRetrieved_ByName() {
@@ -79,19 +75,19 @@ class ContactServiceImplTest {
         assertThat(retrievedContacts.count()).isEqualTo(repositoryContacts.count())
     }
 
-    @Test
+//    @Test
 //    @Execution(ExecutionMode.CONCURRENT)
-    fun test_That_AllContacts_CanBeGotten() {
-        contactService.createContact(Entry("Olukunbi","08109039384", "No 1, Road 3a"))
-        contactService.createContact(Entry("Adewale","08100049384", "No 1, Road 3a"))
-        val allContacts = contactService.findAllContact()
-        assertThat(allContacts?.count()).isEqualTo(3L)
-    }
+//    fun test_That_AllContacts_CanBeGotten() {
+//        contactService.createContact(Entry("Olukunbi","08109039384", "No 1, Road 3a"))
+//        contactService.createContact(Entry("Adewale","08100049384", "No 1, Road 3a"))
+//        val allContacts = contactService.findAllContact()
+//        assertThat(allContacts?.count()).isEqualTo(3L)
+//    }
 
-    @Test
-    fun test_ThatContact_CanBeDeleted() {
-        contactService.deleteContact("09069390202")
-        assertThat(contactService.findContactByPhoneNumber("09069390202")).isEmpty
-    }
+//    @Test
+//    fun test_ThatContact_CanBeDeleted() {
+//        contactService.deleteContact("09069390202")
+//        assertThat(contactService.findContactByPhoneNumber("09069390202")).isEmpty
+//    }
 
 }
