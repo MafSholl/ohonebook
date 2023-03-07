@@ -10,7 +10,7 @@ interface ContactService {
 
     fun createContact(entry: Entry): Contact
     fun findContactByPhoneNumber(phoneNumber: String): Optional<Contact>?
-    fun findContactByName(name: String): Iterable<Contact>
+    fun findContactByName(name: String): List<Contact>?
     fun findAllContact(): List<Contact>?
     fun deleteContact(phoneNumber: String)
 }

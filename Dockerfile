@@ -5,7 +5,6 @@ FROM amazoncorretto:17.0.3-alpine as corretto-jdk
 RUN apk add --no-cache binutils
 
 # Build small JRE image
-#ENV JAVA_HOME=/jre
 RUN $JAVA_HOME/bin/jlink \
          --verbose \
          --add-modules ALL-MODULE-PATH \
@@ -22,7 +21,6 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # copy JRE from the base image
 COPY --from=corretto-jdk /customjre $JAVA_HOME
-
 
 #FROM openjdk:8-jdk-alpine
 WORKDIR /app

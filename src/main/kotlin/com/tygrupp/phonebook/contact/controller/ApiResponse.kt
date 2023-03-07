@@ -1,7 +1,12 @@
 package com.tygrupp.phonebook.contact.controller
 
+import lombok.*
+
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Builder
 data class ApiResponse(
-    private val message: String,
-    private val status: String,
+    @NonNull private val message: String,
+    @NonNull private val status: String?,
     private val data: Any?
     )

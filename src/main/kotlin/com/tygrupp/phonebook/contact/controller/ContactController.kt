@@ -22,10 +22,12 @@ import java.util.regex.Pattern
 class ContactController @Autowired constructor(private var contactService: ContactService) {
 
     /**
-     * This method is to create a new contact
-     * It returns an object of type Contact
-     *
-     * @return Contact
+     * This method is to create a new contact.
+     * It maps to "/create-contact" endpoint.
+     * It returns an object of Contact if indeed created
+     * @param request of type Entry
+     * @return ResponseEntity, with body containing ApiResponse object
+     * @exception PhonebookException caught by a GlobalExceptionHandler class
      */
     @PostMapping("/create-contact")
     fun saveContact(@RequestBody request: Entry, httpServletRequest: HttpServletRequest) : ResponseEntity<*> {
@@ -39,6 +41,14 @@ class ContactController @Autowired constructor(private var contactService: Conta
             )
     }
 
+    /**
+     * This method searches for a contact or list of contacts matching a request content
+     * It maps to "/search-contact" endpoint.
+     * It returns an object of Contact if indeed created
+     * @param request of type String
+     * @return ResponseEntity, with body containing ApiResponse object
+     * @exception PhonebookException caught by a GlobalExceptionHandler class
+     */
     @GetMapping("/search-contact")
     fun findAContact(@RequestBody @NonNull request: String) : ResponseEntity<*> {
         val expression = Pattern.compile(".\\d*")
@@ -56,6 +66,14 @@ class ContactController @Autowired constructor(private var contactService: Conta
                 ) 
             )
     }
+
+    /**
+     * This method searches for a contact or list of contacts matching a request content
+     * It maps to "/" endpoint.
+     *
+     * @return ResponseEntity, with body containing ApiResponse object
+     * @exception PhonebookException caught by a GlobalExceptionHandler class
+     */
     @GetMapping("/")
     fun findAllContact() : ResponseEntity<*> {
         val searchResult = contactService.findAllContact()
@@ -67,6 +85,13 @@ class ContactController @Autowired constructor(private var contactService: Conta
             )
     }
 
+    /**
+     * This method deletes a single contact.
+     * It maps to /search-contact endpoint. Returns no object.
+     * @param request String
+     * @return ResponseEntity, with body containing ApiResponse object
+     * @exception PhonebookException caught by a GlobalExceptionHandler class
+     */
     @DeleteMapping("/delete-contact")
     fun deleteContact(@RequestBody @NonNull request: String) : ResponseEntity<*> {
         contactService.deleteContact(request)

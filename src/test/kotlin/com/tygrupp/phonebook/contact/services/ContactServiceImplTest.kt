@@ -4,12 +4,9 @@ import com.tygrupp.phonebook.contact.models.Contact
 import com.tygrupp.phonebook.contact.models.Entry
 import com.tygrupp.phonebook.contact.repository.ContactRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -63,7 +60,7 @@ class ContactServiceImplTest {
     @Test
     fun test_ThatContact_CanBeRetrieved_ByName() {
         val retrievedContacts = contactService.findContactByName("Olukunbi")
-        assertThat(retrievedContacts::class).isEqualTo(ArrayList::class)
+        assertThat(retrievedContacts!!::class).isEqualTo(ArrayList::class)
     }
 
     @Test
@@ -71,8 +68,8 @@ class ContactServiceImplTest {
         contactService.createContact(Entry("Olukunbi","08109039384", "No 1, Road 3a"))
         val retrievedContacts = contactService.findContactByName("Olukunbi")
         val repositoryContacts = contactRepository.findByName("Olukunbi")
-        assertThat(retrievedContacts.count()).isEqualTo(2L)
-        assertThat(retrievedContacts.count()).isEqualTo(repositoryContacts.count())
+        assertThat(retrievedContacts?.count()).isEqualTo(2L)
+        assertThat(retrievedContacts?.count()).isEqualTo(repositoryContacts?.count())
     }
 
 //    @Test
