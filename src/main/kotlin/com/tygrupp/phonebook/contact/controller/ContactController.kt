@@ -50,15 +50,13 @@ class ContactController @Autowired constructor(private var contactService: Conta
      * @exception PhonebookException caught by a GlobalExceptionHandler class
      */
     @GetMapping("/search-contact")
-    fun findAContact(@RequestBody @NonNull request: String) : ResponseEntity<*> {
+    fun findContact(@RequestBody @NonNull request: String) : ResponseEntity<*> {
         val expression = Pattern.compile(".\\d*")
         val matcher : Matcher = expression.matcher(request)
         var searchResult: Any? = null
-        if (matcher.find()) {
-            searchResult = contactService.findContactByPhoneNumber(request)?.get()
-        } else {
-            searchResult = contactService.findContactByName(request)
-        }
+        if (matcher.find()) searchResult = contactService.findContactByPhoneNumber(request)?.get()
+         else contactService.findContactByName(request)
+
         return ResponseEntity.ok()
             .body(ApiResponse("Successful!",
                 HttpStatus.OK.value().toString(),

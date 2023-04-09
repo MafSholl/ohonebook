@@ -7,13 +7,18 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode
+import org.junit.jupiter.api.parallel.Isolated
+import org.junit.jupiter.api.parallel.ResourceLock
+import org.junit.jupiter.api.parallel.Resources.SYSTEM_PROPERTIES
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("dev")
-//@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.CONCURRENT)
 class ContactServiceImplTest {
 
     @Autowired
@@ -22,12 +27,12 @@ class ContactServiceImplTest {
     private lateinit var contactRepository : ContactRepository
     private lateinit var contact : Contact
 
-    @BeforeEach
-    fun setUp() {
-        contact = contactService.createContact(
-            Entry("Olukunbi","09069390202", "No 1, Road 3f")
-        )
-    }
+//    @BeforeEach
+//    fun setUp() {
+//        contact = contactService.createContact(
+//            Entry("Olukunbi","09069390202", "No 1, Road 3f")
+//        )
+//    }
 
     @Test
     fun testThatContactExist() {
@@ -37,25 +42,26 @@ class ContactServiceImplTest {
 
     @Test
     fun test_ThatContactService_CanCreateContact() {
-        val contactService = ContactServiceImpl(contactRepository)
-        val contact = contactService.createContact(Entry("Olukunbi","09069390202", "No 1, Road 3f"))
-        assertEquals("Olukunbi", contact.name)
-        assertEquals("09069390202", contact.phoneNumber)
+        val contact = contactService.createContact(Entry("kunbi","09066390202", "No 1, Road 3f"))
+        assertEquals("kunbi", contact.name)
+        assertEquals("09066390202", contact.phoneNumber)
         assertEquals("No 1, Road 3f", contact.address)
     }
 
 //    @Test
-//    @Execution(ExecutionMode.CONCURRENT)
+//    @ResourceLock(value = SYSTEM_PROPERTIES, mode = READ_WRITE)
 //    fun test_ThatContactCreated_IsPersisted() {
+//        val contact = contactService.createContact(Entry("kunbi","09066390202", "No 1, Road 3f"))
 //        assertThat(contactRepository.count()).isEqualTo(1L)
 //    }
-//    @Test
-//    fun test_ThatContact_CanBeRetrieved_ByPhoneNumber() {
-//        val retrievedContact = contactService.findContactByPhoneNumber("09069390202")
-//        val repositoryContact = contactRepository.findByPhoneNumber("09069390202")
-//        assertThat(retrievedContact?.get()?.name).isEqualTo("Olukunbi")
-//        assertThat(retrievedContact?.get()?.name).isEqualTo(repositoryContact?.get()?.name)
-//    }
+    @Test
+    fun test_ThatContact_CanBeRetrieved_ByPhoneNumber() {
+        val contact = contactService.createContact(Entry("Olukunbi","09069390202", "No 1, Road 3f"))
+        val retrievedContact = contactService.findContactByPhoneNumber("09069390202")
+        val repositoryContact = contactRepository.findByPhoneNumber("09069390202")
+        assertThat(retrievedContact?.get()?.name).isEqualTo("Olukunbi")
+        assertThat(retrievedContact?.get()?.name).isEqualTo(repositoryContact?.get()?.name)
+    }
 
     @Test
     fun test_ThatContact_CanBeRetrieved_ByName() {
@@ -65,9 +71,10 @@ class ContactServiceImplTest {
 
     @Test
     fun test_ThatMultipleContact_WithSameName_CanBeRetrieved() {
-        contactService.createContact(Entry("Olukunbi","08109039384", "No 1, Road 3a"))
-        val retrievedContacts = contactService.findContactByName("Olukunbi")
-        val repositoryContacts = contactRepository.findByName("Olukunbi")
+        contactService.createContact(Entry("Olawale","09066390202", "No 1, Road 3f"))
+        contactService.createContact(Entry("Olawale","08109039384", "No 1, Road 3a"))
+        val retrievedContacts = contactService.findContactByName("Olawale")
+        val repositoryContacts = contactRepository.findByName("Olawale")
         assertThat(retrievedContacts?.count()).isEqualTo(2L)
         assertThat(retrievedContacts?.count()).isEqualTo(repositoryContacts?.count())
     }
@@ -78,13 +85,14 @@ class ContactServiceImplTest {
 //        contactService.createContact(Entry("Olukunbi","08109039384", "No 1, Road 3a"))
 //        contactService.createContact(Entry("Adewale","08100049384", "No 1, Road 3a"))
 //        val allContacts = contactService.findAllContact()
-//        assertThat(allContacts?.count()).isEqualTo(3L)
+//        assertThat(allContacts?.count()).isEqualTo(2L)
 //    }
 
-//    @Test
-//    fun test_ThatContact_CanBeDeleted() {
-//        contactService.deleteContact("09069390202")
-//        assertThat(contactService.findContactByPhoneNumber("09069390202")).isEmpty
-//    }
+    @Test
+    fun test_ThatContact_CanBeDeleted() {
+        contactService.createContact(Entry("Olukunbi","09069390456", "No 1, Road 3f"))
+        contactService.deleteContact("09069390456")
+        assertThat(contactService.findContactByPhoneNumber("09069390202")).isEmpty
+    }
 
 }
